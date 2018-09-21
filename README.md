@@ -19,7 +19,7 @@ interceptor chain provider. To learn more about Ions, checkout the
 (ns my-ion.example
     (:require [io.pedestal.http :as http]
               [io.pedestal.http.route :as route]
-              [io.pedestal.ions :as provider]
+              [com.cognitect.pedestal.ions :as provider]
               [ion-provider.datomic]
               [ring.util.response :as ring-resp]
               [datomic.client.api :as d]
@@ -29,7 +29,7 @@ interceptor chain provider. To learn more about Ions, checkout the
 (def routes ...)
 
 ;;
-;; 1. Declare the `io.pedestal.ions/ion-provider` chain provider in your service map.
+;; 1. Declare the `com.cognitect.pedestal.ions/ion-provider` chain provider in your service map.
 ;;
 (def service {:env :prod
               ::http/routes routes
