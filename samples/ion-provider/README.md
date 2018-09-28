@@ -58,18 +58,9 @@ Where `$DeploymentGroup` is the name of your Ion deployment group (see
 
 ### Parameters
 
-Datomic Ions provides facilities for accessing system
-parameters. Refer to the [Ion
-Parameters](https://docs.datomic.com/cloud/ions/ions-reference.html#ion-parameters)
-docs for an overview. Access to these parameters is provided for you
-by the Pedestal Ions provider which makes them available on the
-Pedestal Context through the following keys:
-
-- `:com.cognitect.pedestal.ions/app-info`      Contains the results of `(ion/get-app-info)`
-- `:com.cognitect.pedestal.ions/env-map`       Contains the results of `(ion/get-env)`
-- `:com.cognitect.pedestal.ions/params`        Contains the results of `(ion/get-params {:path path})`
-                                               where `path` is calculated using :app-name and :env
-                                               from app-info andenv-map, respectively. Param names are keywordized."
+Pedestal Ions provides access to Datomic Ion parameters. Refer to the
+[README](https://github.com/cognitect-labs/pedestal.ions/blob/master/README.md#parameters)
+for details.
 
 The values of the `:com.cognitect.pedestal.ions/app-info` and
 `:com.cognitect.pedestal.ions/env-map` keys are pulled from their

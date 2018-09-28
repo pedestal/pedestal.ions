@@ -4,10 +4,18 @@
 interceptor chain provider. To learn more about Ions, checkout the
 [docs](https://docs.datomic.com/cloud/ions/ions.html).
 
-Provides access to Datomic Ion
-[params](https://docs.datomic.com/cloud/ions/ions-reference.html#ion-parameters)
-on the Context map. For usage, refer to the `ion-provider`
-[sample](https://github.com/cognitect-labs/pedestal.ions/tree/master/samples/ion-provider#parameters).
+## Parameters
+
+Datomic Ions provides facilities for accessing system
+parameters. Refer to the [Ion Parameters](https://docs.datomic.com/cloud/ions/ions-reference.html#ion-parameters)
+docs for an overview. The Pedestal Ions provider makes these these
+parameters available on the Pedestal Context through the following keys:
+
+- `:com.cognitect.pedestal.ions/app-info`      Contains the results of `(ion/get-app-info)`
+- `:com.cognitect.pedestal.ions/env-map`       Contains the results of `(ion/get-env)`
+- `:com.cognitect.pedestal.ions/params`        Contains the results of `(ion/get-params {:path path})`
+                                               where `path` is calculated using :app-name and :env
+                                               from `app-info` and `env-map`, respectively. Param names are keywordized."
 
 ## Usage
 
