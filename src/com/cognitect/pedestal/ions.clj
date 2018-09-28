@@ -111,8 +111,7 @@
                          (ion/get-params {:path params-path}))}))
 
 (defn datomic-params-interceptor
-  "Constructs an interceptor which assoc's Datomic Ion param info to the context
-  and request maps.
+  "Constructs an interceptor which assoc's Datomic Ion param info to the context map.
 
   The param info is available via the following keys;
   - :com.cognitect.pedestal.ions/app-info      Contains the results of `(ion/get-app-info)`
@@ -126,9 +125,7 @@
     (interceptor/interceptor
      {:name  ::datomic-params-interceptor
       :enter (fn [ctx]
-               (-> ctx
-                   (merge params)
-                   (update-in [:request] merge params)))})))
+               (merge ctx params))})))
 
 (defn ion-provider
   "Given a service map, returns a handler function which consumes ring requests

@@ -4,6 +4,11 @@
 interceptor chain provider. To learn more about Ions, checkout the
 [docs](https://docs.datomic.com/cloud/ions/ions.html).
 
+Provides access to Datomic Ion
+[params](https://docs.datomic.com/cloud/ions/ions-reference.html#ion-parameters)
+on the Context map. For usage, refer to the `ion-provider`
+[sample](https://github.com/cognitect-labs/pedestal.ions/tree/master/samples/ion-provider#parameters).
+
 ## Usage
 
 1. Declare the `io.pedestal.ions/ion-provider` chain provider in your service map.
