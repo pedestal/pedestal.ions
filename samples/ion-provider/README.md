@@ -86,11 +86,13 @@ Manager Parameter Store as follows:
 To push the project to your Datomic Cloud environment, execute the
 following command from the root directory of the sample project:
 
-`clojure -A:dev -m datomic.ion.dev '{:op :push}'`
+`clojure -A:dev -m datomic.ion.dev '{:op :push :uname "pet-service-sample"}'`
+
+We provide a `:uname` key because the sample has a `:local/root` dependency.
 
 This command will return a map containing the key
 `:deploy-command`. Copy the value and execute it at the command line
-to deploy the ionized app (you may need to unescape strings).
+to deploy the ionized app. You will need to unescape the `:uname` value.
 
 The deployment command returns a map as well. This map contains the
 key `:status-command`. Copy the value of this key and execute it on

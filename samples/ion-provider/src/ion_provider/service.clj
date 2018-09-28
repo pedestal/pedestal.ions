@@ -32,12 +32,6 @@
   [request]
   (ring-resp/response "Hello World!"))
 
-(defn info
-  [request]
-  (ring-resp/response {:app-info (::provider/app-info request)
-                       :env      (::provider/env-map request)
-                       :params   (::provider/params request)}))
-
 (defn- get-connection
   "Returns a datomic connection.
   Ensures the db is created and schema is loaded."
@@ -128,7 +122,6 @@
 ;; Tabular routes
 (def routes #{["/" :get (conj common-interceptors `home)]
               ["/about" :get (conj common-interceptors `about)]
-              ["/info" :get (conj common-interceptors `info)]
               ["/pets" :get (conj app-interceptors `pets)]
               ["/pets" :post (into app-interceptors [pet-interceptor `add-pet])]
               ["/pet/:id" :get (into app-interceptors [pet-interceptor `get-pet])]
