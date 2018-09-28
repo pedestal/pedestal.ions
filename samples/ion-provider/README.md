@@ -67,8 +67,8 @@ The values of the `:com.cognitect.pedestal.ions/app-info` and
 respective Datomic Ion param environment variables which were
 specified in the `Local Development` section of this guide.
 
-You will also need to create a `db-name` parameter in AWS Systems
-Manager Parameter Store as follows:
+To run this sample, you will need to create a `db-name` parameter in AWS Systems
+Manager Parameter Store. This can be done as follows:
 
 `aws ssm put-parameter --name /datomic-shared/dev/ion-pet-service/db-name --value pet-store --type String`
 
