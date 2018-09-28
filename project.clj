@@ -25,8 +25,9 @@
   :pedantic? :abort
 
   :aliases {"docs" ["with-profile" "docs" "codox"]}
-  :profiles {:provided {:dependencies [[ring/ring-core "1.6.3"]]}
-             :dev {:dependencies [[io.pedestal/pedestal.service "0.5.4"]]}
+  :profiles {:provided {:dependencies [[com.datomic/ion "0.9.16"]]}
+             :dev {:dependencies [[io.pedestal/pedestal.service "0.5.4"]
+                                  [com.datomic/ion-dev "0.9.175"]]}
              :docs {:pedantic? :ranges
                     :dependencies [[ring/ring-core "1.6.3"]]
                     :plugins   [[lein-codox "0.9.5"]]}})

@@ -13,12 +13,14 @@
   "This function will return a local implementation of the client
   interface when run on a Datomic compute node. If you want to call
   locally, fill in the correct values in the map."
-  (memoize #(d/client {:server-type :ion
-                       :region      "us-east-2"
-                       :system      "ions-pedestal"
-                       :query-group "ions-pedestal"
-                       :endpoint    "http://entry.ions-pedestal.us-east-2.datomic.net:8182/"
-                       :proxy-port  8182})))
+  (memoize (fn [app-name]
+             (let [region (System/getenv "AWS_REGION")]
+               (d/client {:server-type :ion
+                          :region      region
+                          :system      app-name
+                          :query-group app-name
+                          :endpoint    (format "http://entry.%s.%s.datomic.net:8182/" app-name region)
+                          :proxy-port  8182})))))
 
 (defn about
   [request]
@@ -30,12 +32,17 @@
   [request]
   (ring-resp/response "Hello World!"))
 
+(defn info
+  [request]
+  (ring-resp/response {:app-info (::provider/app-info request)
+                       :env      (::provider/env-map request)
+                       :params   (::provider/params request)}))
+
 (defn- get-connection
   "Returns a datomic connection.
   Ensures the db is created and schema is loaded."
-  []
-  (let [client (get-client)
-        db-name "pet-store"]
+  [app-name db-name]
+  (let [client (get-client app-name)]
     (d/create-database client {:db-name db-name})
     (let [conn (d/connect client {:db-name db-name})]
       (ion-provider.datomic/load-dataset conn)
@@ -45,7 +52,9 @@
   (interceptor/interceptor
    {:name ::datomic-interceptor
     :enter (fn [ctx]
-             (let [conn (get-connection)
+             (let [app-name (get-in ctx [::provider/app-info :app-name])
+                   db-name (get-in ctx [::provider/params :db-name])
+                   conn (get-connection app-name db-name)
                    m    {::conn conn
                          ::db   (d/db conn)}]
                (-> ctx
@@ -119,6 +128,7 @@
 ;; Tabular routes
 (def routes #{["/" :get (conj common-interceptors `home)]
               ["/about" :get (conj common-interceptors `about)]
+              ["/info" :get (conj common-interceptors `info)]
               ["/pets" :get (conj app-interceptors `pets)]
               ["/pets" :post (into app-interceptors [pet-interceptor `add-pet])]
               ["/pet/:id" :get (into app-interceptors [pet-interceptor `get-pet])]
@@ -126,8 +136,7 @@
               ["/pet/:id" :delete (into app-interceptors [pet-interceptor `remove-pet])]})
 
 ;; See http/default-interceptors for additional options you can configure
-(def service {:env :prod
-              ;; You can bring your own non-default interceptors. Make
+(def service {;; You can bring your own non-default interceptors. Make
               ;; sure you include routing and set it up right for
               ;; dev-mode. If you do, many other keys for configuring
               ;; default interceptors will be ignored.

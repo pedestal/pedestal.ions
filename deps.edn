@@ -1,0 +1,10 @@
+{:paths ["src" "resources"]
+ :deps  {org.clojure/clojure              {:mvn/version "1.9.0"}
+         io.pedestal/pedestal.interceptor {:mvn/version "0.5.4"}
+         io.pedestal/pedestal.log         {:mvn/version "0.5.4"}}
+
+ :aliases {:provided {:extra-deps {com.datomic/ion {:mvn/version "0.9.26"}}}
+           :dev {:extra-deps {io.pedestal/pedestal.service {:mvn/version "0.5.4"}
+                              com.datomic/ion-dev          {:mvn/version "0.9.176"}}}}
+
+ :mvn/repos {"datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}}}

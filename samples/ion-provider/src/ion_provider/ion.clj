@@ -27,6 +27,14 @@
  (slurp (:body (h {:server-port    0
                    :server-name    "localhost"
                    :remote-addr    "127.0.0.1"
+                   :uri            "/info"
+                   :scheme         "http"
+                   :request-method :get
+                   :headers        {}})))
+
+ (slurp (:body (h {:server-port    0
+                   :server-name    "localhost"
+                   :remote-addr    "127.0.0.1"
                    :uri            "/pet/302"
                    :scheme         "http"
                    :request-method :get

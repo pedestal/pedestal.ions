@@ -6,6 +6,9 @@ pom.xml.asc
 *jar
 *.class
 
+# Clojure
+.cpcache
+
 # Leiningen
 classes/
 lib/

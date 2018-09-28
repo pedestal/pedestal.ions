@@ -3,7 +3,8 @@
             [io.pedestal.log :as log]
             [io.pedestal.interceptor :as interceptor]
             [io.pedestal.interceptor.chain :as chain]
-            [ring.util.response :as ring-response])
+            [ring.util.response :as ring-response]
+            [datomic.ion :as ion])
   (:import [java.io ByteArrayOutputStream]))
 
 (defprotocol IonizeBody
@@ -46,7 +47,8 @@
   (default-content-type [_] nil)
   (ionize [_] ()))
 
-(def terminator-injector
+(def
+  terminator-injector
   (interceptor/interceptor {:name ::terminator-injector
                             :enter (fn [ctx]
                                      (chain/terminate-when ctx #(ring-response/response? (:response %))))}))
@@ -89,11 +91,51 @@
     (assoc req :content-length clength)
     req))
 
+(defn- get-or-fail
+  [m k]
+  (or (get m k) (throw (ex-info (format "Key %s not found." k) {:key k
+                                                                :map m}))))
+
+(defn- prepare-params
+  "Constructs a parameter map containing Datomic Ion params info."
+  []
+  (let [app-info (ion/get-app-info)
+        env-map (ion/get-env)
+        app (get-or-fail app-info :app-name)
+        env (get-or-fail env-map :env)
+        params-path (format "/datomic-shared/%s/%s/" (name env) app)]
+    {::app-info app-info
+     ::env-map env-map
+     ::params (reduce-kv #(assoc %1 (keyword %2) %3)
+                         {}
+                         (ion/get-params {:path params-path}))}))
+
+(defn datomic-params-interceptor
+  "Constructs an interceptor which assoc's Datomic Ion param info to the context
+  and request maps.
+
+  The param info is available via the following keys;
+  - :com.cognitect.pedestal.ions/app-info      Contains the results of `(ion/get-app-info)`
+  - :com.cognitect.pedestal.ions/env-map       Contains the results of `(ion/get-env)`
+  - :com.cognitect.pedestal.ions/params        Contains the results of `(ion/get-params {:path path})
+                                               where `path` is calculated using :app-name and :env,
+                                               from app-info and env-map, respectively.
+                                               Param names are keywordized."
+  []
+  (let [params (prepare-params)]
+    (interceptor/interceptor
+     {:name  ::datomic-params-interceptor
+      :enter (fn [ctx]
+               (-> ctx
+                   (merge params)
+                   (update-in [:request] merge params)))})))
+
 (defn ion-provider
   "Given a service map, returns a handler function which consumes ring requests
   and returns ring responses suitable for Datomic Ion consumption."
   [service-map]
-  (let [interceptors (into [terminator-injector ring-response] (:io.pedestal.http/interceptors service-map))]
+  (let [interceptors (into [(datomic-params-interceptor) terminator-injector ring-response]
+                           (:io.pedestal.http/interceptors service-map))]
     (fn [{:keys [uri] :as request}]
       (let [initial-context  {:request (-> request
                                            (assoc :path-info uri)
