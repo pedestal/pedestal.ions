@@ -238,6 +238,45 @@ curl -X DELETE \
 
 A response with the HTTP status `204: No content` will be returned.
 
+### Connecting to Datomic Cloud from a local repl
+
+Start the SOCKS proxy as per the Datomic Cloud [docs](https://docs.datomic.com/cloud/getting-started/connecting.html#socks-proxy).
+
+Start a repl and connect to it:
+
+    $  clj -Adev:log
+
+Instantiate a handler so you can interact with the app:
+
+    user=> (require '[ion-provider.ion :as ion]
+                    '[ion-provider.service :as service])
+
+    user=> (def h (ion/handler service/service))
+
+Make some requests:
+
+    user=> (h {:server-port    0
+               :server-name    "localhost"
+               :remote-addr    "127.0.0.1"
+               :uri            "/"
+               :scheme         "http"
+               :request-method :get
+               :headers        {}})
+
+    INFO  io.pedestal.http  - {:msg "GET /", :line 80}
+    {:status 200, :headers {"Strict-Transport-Security" "max-age=31536000; includeSubdomains", "X-Frame-Options" "DENY", "X-Content-Type-Options" "nosniff", "X-XSS-Protection" "1; mode=block", "X-Download-Options" "noopen", "X-Permitted-Cross-Domain-Policies" "none", "Content-Security-Policy" "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;", "Content-Type" "text/plain"}, :body "Hello World!"}
+
+    user=> (slurp (:body (h {:server-port    0
+                   :server-name    "localhost"
+                   :remote-addr    "127.0.0.1"
+                   :uri            "/pets"
+                   :scheme         "http"
+                   :request-method :get})))
+
+    INFO  io.pedestal.http  - {:msg "GET /pets", :line 80}
+    ...
+    "[{\"pet-store.pet/id\":2,\"pet-store.pet/name\":\"Dante\",\"pet-store.pet/tag\":\"cat\"},{\"pet-store.pet/id\":1,\"pet-store.pet/name\":\"Yogi\",\"pet-store.pet/tag\":\"dog\"}]"
+
 ## Cleanup
 
 Follow the Datomic Cloud [Deleting a System](https://docs.datomic.com/cloud/operation/deleting.html)
