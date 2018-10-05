@@ -27,18 +27,9 @@
  (slurp (:body (h {:server-port    0
                    :server-name    "localhost"
                    :remote-addr    "127.0.0.1"
-                   :uri            "/info"
+                   :uri            "/pets"
                    :scheme         "http"
-                   :request-method :get
-                   :headers        {}})))
-
- (slurp (:body (h {:server-port    0
-                   :server-name    "localhost"
-                   :remote-addr    "127.0.0.1"
-                   :uri            "/pet/302"
-                   :scheme         "http"
-                   :request-method :get
-                   :headers        {}})))
+                   :request-method :get})))
 
  (h {:server-port    0
      :server-name    "localhost"
@@ -48,6 +39,14 @@
      :request-method :post
      :headers        {"content-type" "application/json"}
      :body           (clojure.java.io/input-stream (.getBytes "{\"id\": 302, \"name\": \"Foob\", \"tag\": \"bird\"}"))})
+
+ (slurp (:body (h {:server-port    0
+                   :server-name    "localhost"
+                   :remote-addr    "127.0.0.1"
+                   :uri            "/pet/302"
+                   :scheme         "http"
+                   :request-method :get
+                   :headers        {}})))
 
  (slurp (:body (h {:server-port    0
                    :server-name    "localhost"

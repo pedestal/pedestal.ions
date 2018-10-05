@@ -1,13 +1,13 @@
 (ns ion-provider.service
   (:require [io.pedestal.http :as http]
+            [io.pedestal.log :as log]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
             [io.pedestal.interceptor :as interceptor]
             [com.cognitect.pedestal.ions :as provider]
             [ion-provider.datomic]
             [ring.util.response :as ring-resp]
-            [datomic.client.api :as d]
-            [datomic.ion.cast :as cast]))
+            [datomic.client.api :as d]))
 
 (def get-client
   "This function will return a local implementation of the client
@@ -42,12 +42,20 @@
       (ion-provider.datomic/load-dataset conn)
       conn)))
 
+(defn- get-in-or-throw
+  [m ks]
+  (if-let [v (get-in m ks)]
+    v
+    (let [msg (format "Value not found for keys %s" ks)]
+      (log/error :msg msg :keys ks :m m)
+      (throw (ex-info msg {})))))
+
 (def datomic-interceptor
   (interceptor/interceptor
    {:name ::datomic-interceptor
     :enter (fn [ctx]
-             (let [app-name (get-in ctx [::provider/app-info :app-name])
-                   db-name (get-in ctx [::provider/params :db-name])
+             (let [app-name (get-in-or-throw ctx [::provider/app-info :app-name])
+                   db-name (get-in-or-throw ctx [::provider/params :db-name])
                    conn (get-connection app-name db-name)
                    m    {::conn conn
                          ::db   (d/db conn)}]
