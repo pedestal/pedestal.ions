@@ -237,3 +237,12 @@ curl -X DELETE \
 ```
 
 A response with the HTTP status `204: No content` will be returned.
+
+## Cleanup
+
+Follow the Datomic Cloud [Deleting a System](https://docs.datomic.com/cloud/operation/deleting.html)
+guide for instructions on removing the provisioned resources.
+
+Delete the policy `Datomic-ion-pet-service-{REGION}`
+
+Delete the CodeDeploy project `ion-pet-service`.
