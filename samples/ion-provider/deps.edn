@@ -13,8 +13,7 @@
  :mvn/repos {"datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}}
 
  :aliases
- {:test {:extra-paths ["dev" "test"]}
-  :log   {:extra-paths ["config"]
+ {:log   {:extra-paths ["config"]
           :extra-deps  {ch.qos.logback/logback-classic {:mvn/version "1.2.3"
                                                         :exclusions  [org.slf4j/slf4j-api]}
                         org.slf4j/slf4j-api            {:mvn/version "1.7.14"}
@@ -25,17 +24,3 @@
                        com.datomic/client-cloud           {:mvn/version "0.8.56"}
                        com.datomic/ion-dev                {:mvn/version "0.9.176"
                                                            :exclusions  [org.slf4j/slf4j-nop]}}}}}
-
-;; TODO: need to deal with this
-#_{:uname         "test",
-   :deploy-groups (ions-pedestal-Compute-1BP4QXQI6VBMR),
-   :dependency-conflicts
-   {:deps
-    {commons-codec/commons-codec             #:mvn {:version "1.10"},
-     org.clojure/tools.analyzer.jvm          #:mvn {:version "0.7.0"},
-     com.fasterxml.jackson.core/jackson-core #:mvn {:version "2.9.5"},
-     org.clojure/tools.reader                #:mvn {:version "1.0.0-beta4"},
-     org.clojure/core.async                  #:mvn {:version "0.3.442"}},
-    :doc
-    "The :push operation overrode these dependencies to match versions already running in Datomic Cloud. To test locally, add these explicit deps to your deps.edn."}
-   }
