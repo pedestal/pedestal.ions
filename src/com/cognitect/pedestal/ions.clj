@@ -5,7 +5,7 @@
             [io.pedestal.interceptor.chain :as chain]
             [ring.util.response :as ring-response]
             [datomic.ion :as ion])
-  (:import [java.io ByteArrayOutputStream]))
+  (:import (java.io OutputStream PipedInputStream PipedOutputStream)))
 
 (defprotocol IonizeBody
   (default-content-type [body] "Get default HTTP content-type for `body`.")
@@ -29,9 +29,16 @@
   clojure.lang.Fn
   (default-content-type [_] nil)
   (ionize [f]
-    (let [o (ByteArrayOutputStream.)]
-      (f o)
-      (-> o .toByteArray ionize)))
+    (let [i (PipedInputStream.)
+          o (PipedOutputStream. i)]
+      (future
+        (try
+          (f o)
+          (catch Exception e
+            (log/error :msg "Failure ionizing function. Unable to create streaming response."))
+          (finally
+            (.close ^OutputStream o))))
+      i))
 
   java.io.File
   (default-content-type [_] "application/octet-stream")
@@ -45,7 +52,8 @@
 
   nil
   (default-content-type [_] nil)
-  (ionize [_] ()))
+  ;; An ion compatible response body is a string or inputstream.
+  (ionize [_] (io/input-stream (byte-array 0))))
 
 (def
   terminator-injector
