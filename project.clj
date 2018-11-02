@@ -24,6 +24,8 @@
   :global-vars {*warn-on-reflection* true}
   :pedantic? :abort
 
+  :repositories [["datomic-cloud" "s3://datomic-releases-1fc2183a/maven/releases"]]
+
   :aliases {"docs" ["with-profile" "docs" "codox"]}
   :profiles {:provided {:dependencies [[com.datomic/ion "0.9.26" :exclusions [commons-logging]]]}
              :dev {:dependencies [[io.pedestal/pedestal.service "0.5.4" :exclusions [joda-time]]
