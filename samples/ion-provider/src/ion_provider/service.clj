@@ -4,7 +4,7 @@
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
             [io.pedestal.interceptor :as interceptor]
-            [com.cognitect.pedestal.ions :as provider]
+            [io.pedestal.ions :as provider]
             [ion-provider.datomic]
             [ring.util.response :as ring-resp]
             [datomic.client.api :as d]))

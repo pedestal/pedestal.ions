@@ -62,8 +62,8 @@ Pedestal Ions provides access to Datomic Ion parameters. Refer to the
 [README](https://github.com/cognitect-labs/pedestal.ions/blob/master/README.md#parameters)
 for details.
 
-The values of the `:com.cognitect.pedestal.ions/app-info` and
-`:com.cognitect.pedestal.ions/env-map` keys are pulled from their
+The values of the `:io.pedestal.ions/app-info` and
+`:io.pedestal.ions/env-map` keys are pulled from their
 respective Datomic Ion param environment variables which were
 specified in the `Local Development` section of this guide.
 
