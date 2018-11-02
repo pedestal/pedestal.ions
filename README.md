@@ -74,5 +74,20 @@ parameters available on the Pedestal Context through the following keys:
  :app-name "my-ion-example"}
 ```
 
-<!-- Copyright 2013 Relevance, Inc. -->
-<!-- Copyright 2018 Cognitect, Inc. -->
+## Contributing
+
+Thanks for your interest in contributing to pedestal.ions! This project is governed by the same contribution guidelines as dictated in the [Contributing to Pedestal](https://github.com/pedestal/pedestal/blob/master/CONTRIBUTING.md) document. Please have a look and sign a [Cognitect Contributor Agreement](https://secure.echosign.com/public/hostedForm?formid=8JU33Z7A7JX84U) before submitting a PR.
+
+---
+
+## License
+Copyright 2018 Cognitect, Inc.
+
+The use and distribution terms for this software are covered by the
+Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0)
+which can be found in the file [epl-v10.html](epl-v10.html) at the root of this distribution.
+
+By using this software in any fashion, you are agreeing to be bound by
+the terms of this license.
+
+You must not remove this notice, or any other, from this software.
