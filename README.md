@@ -32,12 +32,16 @@ Clojure [tools.deps.alpha](https://github.com/clojure/tools.deps.alpha):
 
 Datomic Ions provides facilities for accessing system
 parameters. Refer to the [Ion Parameters](https://docs.datomic.com/cloud/ions/ions-reference.html#ion-parameters)
-docs for an overview. The Pedestal Ions provider makes these these
-parameters available on the Pedestal Context through the following keys:
+docs for an overview. The `io.pedestal.ions` namespace provides an interceptor fn, `datomic-params-interceptor`,
+which makes these these parameters available on the Pedestal Context. Include this interceptor in your commons interceptor collection
+to enable parameter support.
+
+Parameters are available on the Context through the following keys:
 
 - `:io.pedestal.ions/app-info`      Contains the results of `(ion/get-app-info)`
 - `:io.pedestal.ions/env-map`       Contains the results of `(ion/get-env)`
-- `:io.pedestal.ions/params`        Contains the results of `(ion/get-params {:path path})`
+- `:io.pedestal.ions/params`        Only present if the `:get-params?` option is provided.
+                                    Contains the results of `(ion/get-params {:path path})`
                                     where `path` is calculated using :app-name and :env
                                     from `app-info` and `env-map`, respectively. Param names are keywordized."
 

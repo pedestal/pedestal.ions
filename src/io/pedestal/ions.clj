@@ -14,8 +14,8 @@
             [io.pedestal.log :as log]
             [io.pedestal.interceptor :as interceptor]
             [io.pedestal.interceptor.chain :as chain]
-            [ring.util.response :as ring-response]
-            [datomic.ion :as ion])
+            [datomic.ion]
+            [ring.util.response :as ring-response])
   (:import (java.io OutputStream PipedInputStream PipedOutputStream)))
 
 (defprotocol IonizeBody
@@ -116,21 +116,31 @@
                                                                 :map m}))))
 
 (defn- prepare-params
-  "Constructs a parameter map containing Datomic Ion params info."
-  []
-  (let [app-info (ion/get-app-info)
-        env-map (ion/get-env)
+  "Given opts, constructs parameter map containing Datomic Ion params info.
+  The only option supported is `:get-params?`. Refer to the `datomic-params-interceptor`
+  documentation for details."
+  [opts]
+  (let [app-info (datomic.ion/get-app-info)
+        env-map (datomic.ion/get-env)
         app (get-or-fail app-info :app-name)
         env (get-or-fail env-map :env)
         params-path (format "/datomic-shared/%s/%s/" (name env) app)]
-    {::app-info app-info
-     ::env-map env-map
-     ::params (reduce-kv #(assoc %1 (keyword %2) %3)
-                         {}
-                         (ion/get-params {:path params-path}))}))
+    (cond-> {::app-info app-info
+             ::env-map env-map}
+      (:get-params? opts)
+      (assoc ::params
+             (reduce-kv #(assoc %1 (keyword %2) %3)
+                        {}
+                        (datomic.ion/get-params {:path params-path}))))))
 
 (defn datomic-params-interceptor
-  "Constructs an interceptor which assoc's Datomic Ion param info to the context map.
+  "Given opts, constructs an interceptor which assoc's Datomic Ion parameters to
+  the context map.
+
+  opts:
+
+  - :get-params?    If truthy, then parameters will be retrieved from AWS Systems Manager Parameter Store
+                    using the path \"datomic-shared/{env}/{app-name}\".
 
   The param info is available via the following keys;
   - :io.pedestal.ions/app-info      Contains the results of `(ion/get-app-info)`
@@ -139,8 +149,8 @@
                                     where `path` is calculated using :app-name and :env,
                                     from app-info and env-map, respectively.
                                     Param names are keywordized."
-  []
-  (let [params (prepare-params)]
+  [opts]
+  (let [params (prepare-params opts)]
     (interceptor/interceptor
      {:name  ::datomic-params-interceptor
       :enter (fn [ctx]
@@ -150,8 +160,8 @@
   "Given a service map, returns a handler function which consumes ring requests
   and returns ring responses suitable for Datomic Ion consumption."
   [service-map]
-  (let [interceptors (into [(datomic-params-interceptor) terminator-injector ring-response]
-                           (:io.pedestal.http/interceptors service-map))]
+  (let [interceptors    (into [terminator-injector ring-response]
+                              (:io.pedestal.http/interceptors service-map))]
     (fn [{:keys [uri] :as request}]
       (let [initial-context  {:request (-> request
                                            (assoc :path-info uri)

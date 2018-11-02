@@ -11,10 +11,14 @@
 
 (ns io.pedestal.ions-test
   (:require [clojure.test :refer :all]
+            [io.pedestal.interceptor :as interceptor]
+            [io.pedestal.interceptor.chain :as chain]
             [io.pedestal.http :as http]
             [io.pedestal.http.body-params :as body-params]
             [io.pedestal.ions :as ions]
-            [io.pedestal.ions.test :as ions.test]))
+            [io.pedestal.ions.test :as ions.test]
+            [datomic.ion]
+            [clojure.edn :as edn]))
 
 ;; Test app
 (defn about
@@ -32,16 +36,18 @@
 (def routes #{["/" :get (conj common-interceptors `home)]
               ["/about" :get (conj common-interceptors `about)]})
 
-(def service (-> {::http/routes routes ::http/chain-provider ions/ion-provider}
-                 http/default-interceptors
-                 http/create-provider))
+(defn service
+  []
+  (-> {::http/routes routes ::http/chain-provider ions/ion-provider}
+      http/default-interceptors
+      http/create-provider))
 
 ;; Tests
 (deftest home-page-test
-  (is (= (:body (ions.test/response-for service :get "/"))
+  (is (= (:body (ions.test/response-for (service) :get "/"))
          "Hello World!"))
   (is (=
-       (:headers (ions.test/response-for service :get "/"))
+       (:headers (ions.test/response-for (service) :get "/"))
        {"Content-Type" "text/plain"
         "Strict-Transport-Security" "max-age=31536000; includeSubdomains"
         "X-Frame-Options" "DENY"
@@ -53,9 +59,9 @@
 
 (deftest about-page-test
   (is "Clojure 1.9"
-      (:body (ions.test/response-for service :get "/about")))
+      (:body (ions.test/response-for (service) :get "/about")))
   (is (=
-       (:headers (ions.test/response-for service :get "/about"))
+       (:headers (ions.test/response-for (service) :get "/about"))
        {"Content-Type" "text/plain"
         "Strict-Transport-Security" "max-age=31536000; includeSubdomains"
         "X-Frame-Options" "DENY"
@@ -64,3 +70,15 @@
         "X-Download-Options" "noopen"
         "X-Permitted-Cross-Domain-Policies" "none"
         "Content-Security-Policy" "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;"})))
+
+(deftest params-test
+  (let [param-key   "a-param"
+        param-value "a-value"
+        expected    {::ions/app-info {:app-name "params-test"}
+                     ::ions/env-map  {:env :unit-test}
+                     ::ions/params   {(keyword param-key) param-value}}]
+    (with-redefs [datomic.ion/get-app-info (constantly (::ions/app-info expected))
+                  datomic.ion/get-env (constantly (::ions/env-map expected))
+                  datomic.ion/get-params (constantly {param-key param-value})]
+      (is (= expected (chain/execute {} [(ions/datomic-params-interceptor {:get-params? true})])))
+      (is (= (dissoc expected ::ions/params) (chain/execute {} [(ions/datomic-params-interceptor {:get-params? false})]))))))
