@@ -1,0 +1,10 @@
+language: clojure
+lein: lein
+branches:
+  only:
+    - master
+jdk:
+  - oraclejdk8
+notifications:
+  email:
+    - pedestal@thinkrelevance.com
