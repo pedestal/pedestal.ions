@@ -24,7 +24,9 @@
   :global-vars {*warn-on-reflection* true}
   :pedantic? :abort
 
-  :repositories [["datomic-cloud" "s3://datomic-releases-1fc2183a/maven/releases"]]
+  :plugins [[s3-wagon-private "1.3.1" :exclusions [commons-logging]]]
+
+  :repositories [["datomic-cloud" {:url "s3p://datomic-releases-1fc2183a/maven/releases" :no-auth true}]]
 
   :aliases {"docs" ["with-profile" "docs" "codox"]}
   :profiles {:provided {:dependencies [[com.datomic/ion "0.9.26" :exclusions [commons-logging]]]}
