@@ -1,3 +1,0 @@
-{:allow    [ion-provider.ion/app]
- :lambdas  {:app {:fn ion-provider.ion/app :description "Exploring Ions with Pedestal"}}
- :app-name "ion-pet-service"}
