@@ -9,12 +9,12 @@
 ;;
 ;; You must not remove this notice, or any other, from this software.
 
-(ns com.cognitect.pedestal.ions-test
+(ns io.pedestal.ions-test
   (:require [clojure.test :refer :all]
             [io.pedestal.http :as http]
             [io.pedestal.http.body-params :as body-params]
-            [com.cognitect.pedestal.ions :as ions]
-            [com.cognitect.pedestal.ions.test :as ions.test]))
+            [io.pedestal.ions :as ions]
+            [io.pedestal.ions.test :as ions.test]))
 
 ;; Test app
 (defn about

@@ -9,7 +9,7 @@
 ;;
 ;; You must not remove this notice, or any other, from this software.
 
-(ns com.cognitect.pedestal.ions
+(ns io.pedestal.ions
   (:require [clojure.java.io :as io]
             [io.pedestal.log :as log]
             [io.pedestal.interceptor :as interceptor]
@@ -133,12 +133,12 @@
   "Constructs an interceptor which assoc's Datomic Ion param info to the context map.
 
   The param info is available via the following keys;
-  - :com.cognitect.pedestal.ions/app-info      Contains the results of `(ion/get-app-info)`
-  - :com.cognitect.pedestal.ions/env-map       Contains the results of `(ion/get-env)`
-  - :com.cognitect.pedestal.ions/params        Contains the results of `(ion/get-params {:path path})
-                                               where `path` is calculated using :app-name and :env,
-                                               from app-info and env-map, respectively.
-                                               Param names are keywordized."
+  - :io.pedestal.ions/app-info      Contains the results of `(ion/get-app-info)`
+  - :io.pedestal.ions/env-map       Contains the results of `(ion/get-env)`
+  - :io.pedestal.ions/params        Contains the results of `(ion/get-params {:path path})
+                                    where `path` is calculated using :app-name and :env,
+                                    from app-info and env-map, respectively.
+                                    Param names are keywordized."
   []
   (let [params (prepare-params)]
     (interceptor/interceptor

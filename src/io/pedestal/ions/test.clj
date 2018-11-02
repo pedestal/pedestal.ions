@@ -9,7 +9,7 @@
 ;;
 ;; You must not remove this notice, or any other, from this software.
 
-(ns com.cognitect.pedestal.ions.test
+(ns io.pedestal.ions.test
   (:require  [clojure.test :as t]))
 
 (defn response-for

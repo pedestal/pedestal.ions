@@ -11,11 +11,11 @@ parameters. Refer to the [Ion Parameters](https://docs.datomic.com/cloud/ions/io
 docs for an overview. The Pedestal Ions provider makes these these
 parameters available on the Pedestal Context through the following keys:
 
-- `:com.cognitect.pedestal.ions/app-info`      Contains the results of `(ion/get-app-info)`
-- `:com.cognitect.pedestal.ions/env-map`       Contains the results of `(ion/get-env)`
-- `:com.cognitect.pedestal.ions/params`        Contains the results of `(ion/get-params {:path path})`
-                                               where `path` is calculated using :app-name and :env
-                                               from `app-info` and `env-map`, respectively. Param names are keywordized."
+- `:io.pedestal.ions/app-info`      Contains the results of `(ion/get-app-info)`
+- `:io.pedestal.ions/env-map`       Contains the results of `(ion/get-env)`
+- `:io.pedestal.ions/params`        Contains the results of `(ion/get-params {:path path})`
+                                    where `path` is calculated using :app-name and :env
+                                    from `app-info` and `env-map`, respectively. Param names are keywordized."
 
 ## Usage
 
@@ -32,7 +32,7 @@ parameters available on the Pedestal Context through the following keys:
 (ns my-ion.example
     (:require [io.pedestal.http :as http]
               [io.pedestal.http.route :as route]
-              [com.cognitect.pedestal.ions :as provider]
+              [io.pedestal.ions :as provider]
               [ion-provider.datomic]
               [ring.util.response :as ring-resp]
               [datomic.client.api :as d]

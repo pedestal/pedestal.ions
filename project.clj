@@ -10,7 +10,7 @@
 ;
 ; You must not remove this notice, or any other, from this software.
 
-(defproject com.cognitect/pedestal.ions "0.1.0-SNAPSHOT"
+(defproject io.pedestal/pedestal.ions "0.1.0-SNAPSHOT"
   :description "Interceptor chain provider for Datomic ions"
   :url "https://github.com/pedestal/pedestal"
   :scm "https://github.com/pedestal/pedestal"
