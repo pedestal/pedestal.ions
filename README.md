@@ -1,8 +1,32 @@
-# pedestal.ions
+# pedestal.ions [![Build Status](https://travis-ci.com/pedestal/pedestal.ions.svg?branch=master)](https://travis-ci.com/pedestal/pedestal.ions)
 
 [Datomic Ion](https://docs.datomic.com/cloud/ions/ions.html)
 interceptor chain provider. To learn more about Ions, checkout the
 [docs](https://docs.datomic.com/cloud/ions/ions.html).
+
+## Getting the latest release
+[Leiningen](https://github.com/technomancy/leiningen/):
+
+```
+[io.pedestal/pedestal.ions "0.1.0-SNAPSHOT"]
+```
+
+Clojure [tools.deps.alpha](https://github.com/clojure/tools.deps.alpha):
+
+```
+{io.pedestal/pedestal.ions {:mvn/version "0.1.0-SNAPSHOT"}}
+```
+
+[Maven](http://maven.apache.org/):
+
+```
+<dependency>
+  <groupId>io.pedestal</groupId>
+  <artifactId>pedestal.ions</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+</dependency>
+
+```
 
 ## Parameters
 
