@@ -34,9 +34,7 @@ Datomic Ions provides facilities for accessing system
 parameters. Refer to the [Ion Parameters](https://docs.datomic.com/cloud/ions/ions-reference.html#ion-parameters)
 docs for an overview. The `io.pedestal.ions` namespace provides an interceptor fn, `datomic-params-interceptor`,
 which makes these these parameters available on the Pedestal Context. Include this interceptor in your commons interceptor collection
-to enable parameter support.
-
-Parameters are available on the Context through the following keys:
+to enable parameter support. If included, this interceptor makes parameters available on the Context through the following keys:
 
 - `:io.pedestal.ions/app-info`      Contains the results of `(ion/get-app-info)`
 - `:io.pedestal.ions/env-map`       Contains the results of `(ion/get-env)`
