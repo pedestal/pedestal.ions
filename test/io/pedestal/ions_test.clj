@@ -80,5 +80,5 @@
     (with-redefs [datomic.ion/get-app-info (constantly (::ions/app-info expected))
                   datomic.ion/get-env (constantly (::ions/env-map expected))
                   datomic.ion/get-params (constantly {param-key param-value})]
-      (is (= expected (chain/execute {} [(ions/datomic-params-interceptor {:get-params? true})])))
+      (is (= expected (chain/execute {} [(ions/datomic-params-interceptor)])))
       (is (= (dissoc expected ::ions/params) (chain/execute {} [(ions/datomic-params-interceptor {:get-params? false})]))))))

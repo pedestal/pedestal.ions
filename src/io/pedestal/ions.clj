@@ -127,6 +127,7 @@
                    params-path (format "/datomic-shared/%s/%s/" (name env) app)]
                (cond-> {::app-info app-info
                         ::env-map env-map}
+
                  (:get-params? opts)
                  (assoc ::params
                         (reduce-kv #(assoc %1 (keyword %2) %3)
@@ -142,8 +143,9 @@
 
   opts:
 
-  - :get-params?    If truthy, then parameters will be retrieved from AWS Systems Manager Parameter Store
-                    using the path \"datomic-shared/{env}/{app-name}\".
+  - :get-params?  If true, then parameters will be retrieved from AWS
+                  Systems Manager Parameter Store using the path \"datomic-shared/{env}/{app-name}\".
+                  Defaults to `true`.
 
   The param info is available via the following keys;
   - :io.pedestal.ions/app-info      Contains the results of `(ion/get-app-info)`
@@ -152,11 +154,13 @@
                                     where `path` is calculated using :app-name and :env,
                                     from app-info and env-map, respectively.
                                     Param names are keywordized."
-  [opts]
-  (interceptor/interceptor
-   {:name  ::datomic-params-interceptor
-    :enter (fn [ctx]
-             (merge ctx (prepare-params opts)))}))
+  ([]
+   (datomic-params-interceptor {:get-params? true}))
+  ([opts]
+   (interceptor/interceptor
+    {:name  ::datomic-params-interceptor
+     :enter (fn [ctx]
+              (merge ctx (prepare-params opts)))})))
 
 (defn ion-provider
   "Given a service map, returns a handler function which consumes ring requests
