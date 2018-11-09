@@ -100,6 +100,10 @@ to enable parameter support. If included, this interceptor makes parameters avai
  :app-name "my-ion-example"}
 ```
 
+Check out the [Pedestal Ions Sample](https://github.com/pedestal/pedestal-ions-sample) project for
+a fully functional sample and [example](https://github.com/pedestal/pedestal-ions-sample/blob/master/deps.edn)
+`deps.edn` configuration.
+
 ## Contributing
 
 Thanks for your interest in contributing to pedestal.ions! This project is governed by the same contribution guidelines as dictated in the [Contributing to Pedestal](https://github.com/pedestal/pedestal/blob/master/CONTRIBUTING.md) document. Please have a look and sign a [Cognitect Contributor Agreement](https://secure.echosign.com/public/hostedForm?formid=8JU33Z7A7JX84U) before submitting a PR.
