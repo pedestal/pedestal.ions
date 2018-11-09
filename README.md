@@ -8,13 +8,13 @@ interceptor chain provider. To learn more about Ions, checkout the
 [Leiningen](https://github.com/technomancy/leiningen/):
 
 ```
-[io.pedestal/pedestal.ions "0.1.0-SNAPSHOT"]
+[io.pedestal/pedestal.ions "0.1.0"]
 ```
 
 Clojure [tools.deps.alpha](https://github.com/clojure/tools.deps.alpha):
 
 ```
-{io.pedestal/pedestal.ions {:mvn/version "0.1.0-SNAPSHOT"}}
+{io.pedestal/pedestal.ions {:mvn/version "0.1.0"}}
 ```
 
 [Maven](http://maven.apache.org/):
