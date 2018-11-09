@@ -115,23 +115,26 @@
   (or (get m k) (throw (ex-info (format "Key %s not found." k) {:key k
                                                                 :map m}))))
 
-(defn- prepare-params
+(def ^:private prepare-params
   "Given opts, constructs parameter map containing Datomic Ion params info.
   The only option supported is `:get-params?`. Refer to the `datomic-params-interceptor`
   documentation for details."
-  [opts]
-  (let [app-info (datomic.ion/get-app-info)
-        env-map (datomic.ion/get-env)
-        app (get-or-fail app-info :app-name)
-        env (get-or-fail env-map :env)
-        params-path (format "/datomic-shared/%s/%s/" (name env) app)]
-    (cond-> {::app-info app-info
-             ::env-map env-map}
-      (:get-params? opts)
-      (assoc ::params
-             (reduce-kv #(assoc %1 (keyword %2) %3)
-                        {}
-                        (datomic.ion/get-params {:path params-path}))))))
+  (memoize (fn [opts]
+             (let [app-info    (datomic.ion/get-app-info)
+                   env-map     (datomic.ion/get-env)
+                   app         (get-or-fail app-info :app-name)
+                   env         (get-or-fail env-map :env)
+                   params-path (format "/datomic-shared/%s/%s/" (name env) app)]
+               (cond-> {::app-info app-info
+                        ::env-map env-map}
+                 (:get-params? opts)
+                 (assoc ::params
+                        (reduce-kv #(assoc %1 (keyword %2) %3)
+                                   {}
+                                   (datomic.ion/get-params {:path params-path}))))))))
+
+(def ^:private prepare-params
+  (memoize prepare-params))
 
 (defn datomic-params-interceptor
   "Given opts, constructs an interceptor which assoc's Datomic Ion parameters to
@@ -150,11 +153,10 @@
                                     from app-info and env-map, respectively.
                                     Param names are keywordized."
   [opts]
-  (let [params (prepare-params opts)]
-    (interceptor/interceptor
-     {:name  ::datomic-params-interceptor
-      :enter (fn [ctx]
-               (merge ctx params))})))
+  (interceptor/interceptor
+   {:name  ::datomic-params-interceptor
+    :enter (fn [ctx]
+             (merge ctx (prepare-params opts)))}))
 
 (defn ion-provider
   "Given a service map, returns a handler function which consumes ring requests
