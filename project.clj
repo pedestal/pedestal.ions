@@ -10,10 +10,10 @@
 ;
 ; You must not remove this notice, or any other, from this software.
 
-(defproject io.pedestal/pedestal.ions "0.1.0"
+(defproject io.pedestal/pedestal.ions "0.1.1-SNAPSHOT"
   :description "Interceptor chain provider for Datomic ions"
-  :url "https://github.com/pedestal/pedestal"
-  :scm "https://github.com/pedestal/pedestal"
+  :url "https://github.com/pedestal/pedestal.ions"
+  :scm "https://github.com/pedestal/pedestal.ions"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]

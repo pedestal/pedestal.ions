@@ -23,7 +23,7 @@ Clojure [tools.deps.alpha](https://github.com/clojure/tools.deps.alpha):
 <dependency>
   <groupId>io.pedestal</groupId>
   <artifactId>pedestal.ions</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
 </dependency>
 
 ```
