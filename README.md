@@ -68,7 +68,7 @@ to enable parameter support. If included, this interceptor makes parameters avai
 (def routes ...)
 
 ;;
-;; 1. Declare the `com.cognitect.pedestal.ions/ion-provider` chain provider in your service map.
+;; 1. Declare the `io.pedestal.ions/ion-provider` chain provider in your service map.
 ;;
 (def service {:env :prod
               ::http/routes routes
