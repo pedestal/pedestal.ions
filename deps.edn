@@ -1,11 +1,15 @@
 {:paths ["src" "resources"]
- :deps  {org.clojure/clojure              {:mvn/version "1.9.0"}
-         io.pedestal/pedestal.interceptor {:mvn/version "0.5.4"}
-         io.pedestal/pedestal.log         {:mvn/version "0.5.4"}}
+ :deps  {org.clojure/clojure              {:mvn/version "1.10.0"}
+         io.pedestal/pedestal.interceptor {:mvn/version "0.5.5"}
+         io.pedestal/pedestal.log         {:mvn/version "0.5.5"}}
 
- :aliases {:provided {:extra-deps {com.datomic/ion {:mvn/version "0.9.26"}}}
-           :dev {:extra-deps {io.pedestal/pedestal.service {:mvn/version "0.5.4"}
+ :aliases {:provided {:extra-deps {com.datomic/ion {:mvn/version "0.9.28"}}}
+           :dev {:extra-deps {io.pedestal/pedestal.service {:mvn/version "0.5.5"}
                               javax.servlet/javax.servlet-api {:mvn/version "3.1.0"}
-                              com.datomic/ion-dev          {:mvn/version "0.9.176"}}}}
+                              com.datomic/ion-dev          {:mvn/version "0.9.186"}}}
+           :test {:extra-paths ["test"]
+                  :extra-deps {com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                                                          :sha "028a6d41ac9ac5d5c405dfc38e4da6b4cc1255d5"}}
+                  :main-opts ["-m" "cognitect.test-runner"]}}
 
  :mvn/repos {"datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}}}
