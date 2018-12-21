@@ -1,5 +1,9 @@
 language: clojure
-lein: lein
+install:
+  - curl -O https://download.clojure.org/install/linux-install-1.10.0.403.sh
+  - chmod +x linux-install-1.10.0.403.sh
+  - sudo ./linux-install-1.10.0.403.sh
+script: clojure -Aprovided:dev:test
 branches:
   only:
     - master
