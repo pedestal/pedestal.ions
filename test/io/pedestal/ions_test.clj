@@ -18,23 +18,30 @@
             [io.pedestal.ions :as ions]
             [io.pedestal.ions.test :as ions.test]
             [datomic.ion]
-            [clojure.edn :as edn]))
+            [cheshire.core :as json])
+  (:import (java.io ByteArrayInputStream)))
 
 ;; Test app
 (defn about
-  [request]
+  [_]
   {:status 200
    :body   (format "Clojure %s" (clojure-version))})
 
 (defn home
-  [request]
+  [_]
   {:status 200
    :body  "Hello World!"})
+
+(defn echo
+  [request]
+  {:status 200
+   :body (:json-params request)})
 
 (def common-interceptors [(body-params/body-params) http/json-body])
 
 (def routes #{["/" :get (conj common-interceptors `home)]
-              ["/about" :get (conj common-interceptors `about)]})
+              ["/about" :get (conj common-interceptors `about)]
+              ["/echo" :post (conj common-interceptors `echo)]})
 
 (defn service
   []
@@ -62,14 +69,45 @@
       (:body (ions.test/response-for (service) :get "/about")))
   (is (=
        (:headers (ions.test/response-for (service) :get "/about"))
-       {"Content-Type" "text/plain"
-        "Strict-Transport-Security" "max-age=31536000; includeSubdomains"
-        "X-Frame-Options" "DENY"
-        "X-Content-Type-Options" "nosniff"
-        "X-XSS-Protection" "1; mode=block"
-        "X-Download-Options" "noopen"
+       {"Content-Type"                      "text/plain"
+        "Strict-Transport-Security"         "max-age=31536000; includeSubdomains"
+        "X-Frame-Options"                   "DENY"
+        "X-Content-Type-Options"            "nosniff"
+        "X-XSS-Protection"                  "1; mode=block"
+        "X-Download-Options"                "noopen"
         "X-Permitted-Cross-Domain-Policies" "none"
-        "Content-Security-Policy" "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;"})))
+        "Content-Security-Policy"           "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;"})))
+
+(defn- post-echo
+  [body]
+  (ions.test/response-for (service)
+                          :post "/echo"
+                          :headers {"content-type" "application/json"}
+                          :body body))
+
+(deftest post-test
+  (let [expected     {:foo "bar"}
+        json-payload (json/encode expected)]
+    ;; user are here instead
+    (testing "string body"
+      (let [result (post-echo json-payload)]
+        (is (= 200 (:status result)))
+        (is (= expected
+               (-> result
+                   :body
+                   slurp
+                   (json/parse-string keyword))))))
+
+    (testing "stream body"
+      (let [result (post-echo (ByteArrayInputStream. (.getBytes json-payload)))]
+        (is (= 200 (:status result)))
+        (is (= expected
+               (-> result
+                   :body
+                   slurp
+                   (json/parse-string keyword))))))))
+
+
 
 (deftest params-test
   (let [param-key   "a-param"
