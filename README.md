@@ -5,27 +5,12 @@ interceptor chain provider. To learn more about Ions, checkout the
 [docs](https://docs.datomic.com/cloud/ions/ions.html).
 
 ## Getting the latest release
-[Leiningen](https://github.com/technomancy/leiningen/):
-
-```
-[io.pedestal/pedestal.ions "0.1.0"]
-```
 
 Clojure [tools.deps.alpha](https://github.com/clojure/tools.deps.alpha):
 
 ```
-{io.pedestal/pedestal.ions {:mvn/version "0.1.0"}}
-```
-
-[Maven](http://maven.apache.org/):
-
-```
-<dependency>
-  <groupId>io.pedestal</groupId>
-  <artifactId>pedestal.ions</artifactId>
-  <version>0.1.0</version>
-</dependency>
-
+{io.pedestal/pedestal.ions {:git/url "https://github.com/pedestal/pedestal.ions.git"
+                            :sha "e4748d9a292d348fb31fe1a36b10bf0981598650"}}
 ```
 
 ## Caveats
