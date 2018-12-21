@@ -10,7 +10,8 @@ Clojure [tools.deps.alpha](https://github.com/clojure/tools.deps.alpha):
 
 ```
 {io.pedestal/pedestal.ions {:git/url "https://github.com/pedestal/pedestal.ions.git"
-                            :sha "e4748d9a292d348fb31fe1a36b10bf0981598650"}}
+                            :sha "ac9a0ddc11521c31e4d617dc10cb912f181e7cae"
+                            :tag "0.1.1"}}
 ```
 
 ## Caveats
