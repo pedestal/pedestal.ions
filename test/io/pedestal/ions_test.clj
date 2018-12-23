@@ -107,8 +107,6 @@
                    slurp
                    (json/parse-string keyword))))))))
 
-
-
 (deftest params-test
   (let [param-key   "a-param"
         param-value "a-value"
