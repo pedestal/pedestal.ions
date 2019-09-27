@@ -134,9 +134,6 @@
                                    {}
                                    (datomic.ion/get-params {:path params-path}))))))))
 
-(def ^:private prepare-params
-  (memoize prepare-params))
-
 (defn datomic-params-interceptor
   "Given opts, constructs an interceptor which assoc's Datomic Ion parameters to
   the context map.
