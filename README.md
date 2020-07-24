@@ -1,4 +1,4 @@
-# pedestal.ions [![Build Status](https://travis-ci.com/pedestal/pedestal.ions.svg?branch=master)](https://travis-ci.com/pedestal/pedestal.ions)
+# pedestal.ions ![CI](https://github.com/pedestal/pedestal.ions/workflows/CI/badge.svg)
 
 [Datomic Ion](https://docs.datomic.com/cloud/ions/ions.html)
 interceptor chain provider. To learn more about Ions, checkout the
