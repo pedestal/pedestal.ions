@@ -38,7 +38,7 @@ response body is currently not supported.
               [ion-provider.datomic]
               [ring.util.response :as ring-resp]
               [datomic.client.api :as d]
-              [datomic.ion.lambda.api-gateway :as apig])
+              [datomic.ion.lambda.api-gateway :as apig]))
 
 ;; Routes elided
 (def routes ...)
